@@ -77,52 +77,52 @@ public interface ParameterBuilder<C extends CharSequence, T> {
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Boolean> newFlag(Class<Boolean> classType) {
-		return new ParameterBuilderImpl<C, Boolean>(classType);
+		return new ParameterBuilderImpl<C, Boolean>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Float> newFloat(Class<Float> classType) {
-		return new ParameterBuilderImpl<C, Float>(classType);
+		return new ParameterBuilderImpl<C, Float>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Integer> newInteger(Class<Integer> classType) {
-		return new ParameterBuilderImpl<C, Integer>(classType);
+		return new ParameterBuilderImpl<C, Integer>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Path> newPath(Class<Path> classType) {
-		return new ParameterBuilderImpl<C, Path>(classType);
+		return new ParameterBuilderImpl<C, Path>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, String> newText(Class<String> classType) {
-		return new ParameterBuilderImpl<C, String>(classType);
+		return new ParameterBuilderImpl<C, String>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Boolean> newFlagArray(Class<Boolean[]> classType) {
-		return new ParameterBuilderImpl<C, Boolean>(classType);
+		return new ParameterBuilderImpl<C, Boolean>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Float[]> newFloatArray(Class<Float[]> classType) {
-		return new ParameterBuilderImpl<C, Float[]>(classType);
+		return new ParameterBuilderImpl<C, Float[]>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Integer[]> newIntegerArray(Class<Integer[]> classType) {
-		return new ParameterBuilderImpl<C, Integer[]>(classType);
+		return new ParameterBuilderImpl<C, Integer[]>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, Path[]> newPathArray(Class<Path[]> classType) {
-		return new ParameterBuilderImpl<C, Path[]>(classType);
+		return new ParameterBuilderImpl<C, Path[]>(classType, false);
 	}
 
 
 	public static <C extends CharSequence> ParameterBuilderImpl<C, String[]> newTextArray(Class<String[]> classType) {
-		return new ParameterBuilderImpl<C, String[]>(classType);
+		return new ParameterBuilderImpl<C, String[]>(classType, false);
 	}
 
 

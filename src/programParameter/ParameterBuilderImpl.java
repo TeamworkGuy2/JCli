@@ -21,8 +21,8 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 	private Consumer<T> setter;
 
 
-	ParameterBuilderImpl(Map<String, ? extends T> enumsMap, Class<T> dataType, boolean isArray) {
-		this(dataType);
+	ParameterBuilderImpl(Map<String, ? extends T> enumsMap, Class<T> dataType, boolean isEnum, boolean isArray) {
+		this(dataType, isEnum);
 		@SuppressWarnings("unchecked")
 		Map<String, T> enumMapE = (Map<String, T>) enumsMap;
 		this.enumMap = enumMapE;
@@ -30,16 +30,13 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 
 
 	// package-private
-	ParameterBuilderImpl(Class<?> classType) {
+	ParameterBuilderImpl(Class<?> classType, boolean isEnum) {
 		this.isArray = classType.isArray();
 		if(this.isArray) {
 			classType = classType.getComponentType();
 		}
 
-		if(classType.isEnum()) {
-			this.type = ParameterType.ENUM;
-		}
-		else if(classType == Boolean.TYPE || classType == Boolean.class) {
+		if(classType == Boolean.TYPE || classType == Boolean.class) {
 			this.type = ParameterType.FLAG;
 		}
 		else if(classType == Float.TYPE || classType == Float.class) {
@@ -53,6 +50,9 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 		}
 		else if(String.class.isAssignableFrom(classType)) {
 			this.type = ParameterType.TEXT;
+		}
+		else if(isEnum && Enum.class.isAssignableFrom(classType)) {
+			this.type = ParameterType.ENUM;
 		}
 		else {
 			throw new IllegalArgumentException("the class '" + classType + "'" +
@@ -192,7 +192,7 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 					"use newEnumArrayParameterBuilder() for parsing arrays of enum values");
 		}
 		Map<String, E> enumMap = MapBuilder.newMutableEnumNames(enumClass);
-		return new ParameterBuilderImpl<C, E>(enumMap, enumClass, false);
+		return new ParameterBuilderImpl<C, E>(enumMap, enumClass, true, false);
 	}
 
 
@@ -206,19 +206,19 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 		}
 		Class<E> enumType = (Class<E>)enumArrayClass.getComponentType();
 		Map<String, E> enumMap = MapBuilder.newMutableEnumNames(enumType);
-		return new ParameterBuilderImpl<C, E>(enumMap, enumType, false);
+		return new ParameterBuilderImpl<C, E>(enumMap, enumType, true, false);
 	}
 
 
 	public static final <C extends CharSequence, T> ParameterBuilderImpl<C, T> newEnumMapParameterBuilder(
 			Map<String, ? extends T> enumsMap, Class<T> dataType) {
-		return new ParameterBuilderImpl<C, T>((Map<String, T>)enumsMap, dataType, false);
+		return new ParameterBuilderImpl<C, T>((Map<String, T>)enumsMap, dataType, true, false);
 	}
 
 
 	public static final <C extends CharSequence, T> ParameterBuilderImpl<C, T> newEnumArrayMapParameterBuilder(
 			Map<String, ? extends T> enumsMap, Class<T[]> dataType) {
-		return new ParameterBuilderImpl<C, T>((Map<String, T>)enumsMap, (Class<T>)dataType.getComponentType(), true);
+		return new ParameterBuilderImpl<C, T>((Map<String, T>)enumsMap, (Class<T>)dataType.getComponentType(), true, true);
 	}
 
 }

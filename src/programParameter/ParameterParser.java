@@ -152,11 +152,11 @@ public final class ParameterParser<U> {
 		//char[] spaces = new String("                                                                ").toCharArray();
 		if(param.charAt(0) == quote) {
 			lookingForQuote = true;
-			subsequenceStartIndex = -1;
+			subsequenceStartIndex = 0;
 		}
 		else {
 			lookingForWhitespace = true;
-			subsequenceStartIndex = -1;
+			subsequenceStartIndex = 0;
 		}
 
 		// For each character in the string
@@ -180,14 +180,14 @@ public final class ParameterParser<U> {
 					lookingForWhitespace = false;
 				}
 				else {
-					subsequenceStartIndex = i-1;
+					subsequenceStartIndex = i;
 				}
 			}
 			// Search for closing (second) space while not between an opening and closing quote
 			if(!lookingForQuote && lookingForWhitespace && Character.isWhitespace(c)) {
 				//outP.println(param);
 				//outP.println(new String(spaces, 0, i) + "^end space");
-				params.add(param.substring(subsequenceStartIndex+1, i));
+				params.add(param.substring(subsequenceStartIndex, i));
 				lookingForWhitespace = false;
 				subsequenceStartIndex = -1;
 				//continue;
@@ -199,17 +199,17 @@ public final class ParameterParser<U> {
 				lookingForWhitespace = true;
 				if(finishedQuotes) {
 					finishedQuotes = false;
-					params.add(trimQuotes(param.substring(subsequenceStartIndex+1, i)));
+					params.add(trimQuotes(param.substring(subsequenceStartIndex, i)));
 					//startIndex = -1;
 				}
-				subsequenceStartIndex = i;
+				subsequenceStartIndex = i+1;
 			}
 		}
 
 		if(subsequenceStartIndex != -1) {
 			//outP.println(param);
 			//outP.println(new String(spaces, 0, param.length()-1) + "^end");
-			params.add(trimQuotes(param.substring(subsequenceStartIndex+1, param.length())));
+			params.add(trimQuotes(param.substring(subsequenceStartIndex, param.length())));
 			subsequenceStartIndex = -1;
 		}
 		else if(params.size() == 0) {

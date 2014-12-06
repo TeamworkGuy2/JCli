@@ -15,6 +15,7 @@ import programParameter.ParameterBuilder;
 import programParameter.ParameterMetaData;
 import programParameter.ParameterParser;
 import programParameter.ParameterSet;
+import checks.Check;
 
 /**
  * @author TeamworkGuy2
@@ -159,10 +160,23 @@ public class ProgramArgsTest {
 
 
 	private static final void testParseString() {
-		String[] params = new String[] { "arg_one_1 with 3 \"and argument 4\" \"or \\\' quote inside\"" };
-		for(String param : params) {
-			System.out.println("parameters: " + param  + "\nparsed: " + ParameterParser.parseParameters(param));
-		}
+		String[] params = new String[] {
+				"1 w 3 \"arg 4\" \"or \\\' quote\"",
+				"\"a b\" c\"",
+				"\"vla\", \"wa\"",
+				" abc\"de\"",
+				"\"\""
+		};
+		List<String>[] expect = new List[] {
+				Arrays.asList("1", "w", "3", "arg 4", "or \\\' quote"),
+				Arrays.asList("a b", "c\""),
+				Arrays.asList("\"vla\",", "wa"),
+				Arrays.asList("abc\"de\""),
+				Arrays.asList("")
+		};
+		Check.checkTests(params, expect, "", "", (param) -> {
+			return ParameterParser.parseParameters(param);
+		});
 	}
 
 
@@ -191,11 +205,11 @@ public class ProgramArgsTest {
 
 
 	public static void main(String[] args) {
+		testParseString();
 		String[] argAry = ParameterParser.parseParameters(
 				"-help -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
 		).toArray(new String[0]);
 		programArgsTest(argAry);
-		//testParseString();
 	}
 
 }
