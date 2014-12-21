@@ -1,5 +1,7 @@
 package programParameter.test;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
@@ -152,8 +154,8 @@ public class ProgramArgsTest {
 
 		ParameterSet<String> paramSet = ParameterSet.newParameterSet(Arrays.asList(loopParam, timeUnitParam,
 				searchPathParam, recentPathsParam, taskNameParam, regexSearchParam), true, "-help");
-		paramSet.parse(args, 0, System.out);
-		//paramSet.parseInteractive(args, 0, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
+		//paramSet.parse(args, 0, System.out);
+		paramSet.parseInteractive(args, 0, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
 
 		System.out.println("params obj: " + params);
 	}
@@ -165,6 +167,8 @@ public class ProgramArgsTest {
 				"\"a b\" c\"",
 				"\"vla\", \"wa\"",
 				" abc\"de\"",
+				"\"alpha beta\"",
+				"\"a=\\\"A\\\"\"",
 				"\"\""
 		};
 		List<String>[] expect = new List[] {
@@ -172,6 +176,8 @@ public class ProgramArgsTest {
 				Arrays.asList("a b", "c\""),
 				Arrays.asList("\"vla\",", "wa"),
 				Arrays.asList("abc\"de\""),
+				Arrays.asList("alpha beta"),
+				Arrays.asList("a=\"A\""),
 				Arrays.asList("")
 		};
 		Check.checkTests(params, expect, "", "", (param) -> {
@@ -206,10 +212,10 @@ public class ProgramArgsTest {
 
 	public static void main(String[] args) {
 		testParseString();
-		String[] argAry = ParameterParser.parseParameters(
+		/*String[] argAry = ParameterParser.parseParameters(
 				"-help -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
 		).toArray(new String[0]);
-		programArgsTest(argAry);
+		programArgsTest(argAry);*/
 	}
 
 }

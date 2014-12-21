@@ -11,6 +11,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import stringUtils.StringReplace;
 import functionUtils.TriConsumer;
 
 /** A program parameter that can be identified by a list of aliases
@@ -124,7 +125,7 @@ public final class ParameterParser<U> {
 	 * Spaces between opening and closing quotes are not split.
 	 */
 	public static final List<String> parseParameters(String param) {
-		return parseParameters(param, '"');
+		return parseParameters(param, '"', true, '\\', new ArrayList<>());
 	}
 
 
@@ -138,12 +139,31 @@ public final class ParameterParser<U> {
 	 * Spaces between opening and closing quote characters are not split.
 	 */
 	public static final List<String> parseParameters(String param, final char quote) {
+		return parseParameters(param, quote, true, '\\', new ArrayList<>());
+	}
+
+
+	/** Parse a string into an array of strings by splitting at spaces and
+	 * quote characters. Primarily used to parse a single parameter string
+	 * into multiple parameters.
+	 * @param param the string to split, this string is trimmed first.
+	 * @param quote the character that represents a quote (normally a {@code "} or {@code '}).
+	 * @param parseEscapeChars true to check for escape characters before closing quotes,
+	 * false to end at the first closing quote
+	 * @param escapeChar the character to recognize as an escape character before
+	 * potential closing quote
+	 * @param dst the list to add parsed strings to
+	 * @return the {@code dst} string list containing the original string split at
+	 * spaces or quote characters. Quote characters without spaces before them are not split.
+	 * Spaces between opening and closing quote characters are not split.
+	 */
+	public static final List<String> parseParameters(String param, final char quote,
+			final boolean parseEscapeChars, final char escapeChar, List<String> dst) {
 		// used for debugging
 		//char[] spaces = new char[800];
 		//for(int i = 0; i < spaces.length; i++) { spaces[i] = ' '; }
 
 		param = param.trim();
-		List<String> params = new ArrayList<String>();
 		boolean lookingForQuote = false;
 		boolean lookingForWhitespace = false;
 		boolean finishedQuotes = false;
@@ -163,7 +183,7 @@ public final class ParameterParser<U> {
 		for(int i = 0, size = param.length(); i < size; i++) {
 			char c = param.charAt(i);
 			// Search for a closing quote
-			if(i != 0 && lookingForQuote && c == quote) {
+			if(i != 0 && lookingForQuote && c == quote && (!parseEscapeChars || param.charAt(i - 1) != escapeChar)) {
 				//outP.println(param);
 				//outP.println(new String(spaces, 0, i) + "^end quote");
 				lookingForQuote = false;
@@ -172,7 +192,7 @@ public final class ParameterParser<U> {
 				continue;
 			}
 			// Search for an opening quote
-			if(c == quote) {
+			if(!lookingForQuote && c == quote) {
 				//outP.println(param);
 				//outP.println(new String(spaces, 0, i) + "^start quote");
 				lookingForQuote = true;
@@ -187,7 +207,8 @@ public final class ParameterParser<U> {
 			if(!lookingForQuote && lookingForWhitespace && Character.isWhitespace(c)) {
 				//outP.println(param);
 				//outP.println(new String(spaces, 0, i) + "^end space");
-				params.add(param.substring(subsequenceStartIndex, i));
+				String paramStr = param.substring(subsequenceStartIndex, i);
+				dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 				lookingForWhitespace = false;
 				subsequenceStartIndex = -1;
 				//continue;
@@ -199,7 +220,8 @@ public final class ParameterParser<U> {
 				lookingForWhitespace = true;
 				if(finishedQuotes) {
 					finishedQuotes = false;
-					params.add(trimQuotes(param.substring(subsequenceStartIndex, i)));
+					String paramStr = trimQuotes(param.substring(subsequenceStartIndex, i));
+					dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 					//startIndex = -1;
 				}
 				subsequenceStartIndex = i+1;
@@ -209,14 +231,16 @@ public final class ParameterParser<U> {
 		if(subsequenceStartIndex != -1) {
 			//outP.println(param);
 			//outP.println(new String(spaces, 0, param.length()-1) + "^end");
-			params.add(trimQuotes(param.substring(subsequenceStartIndex, param.length())));
+			String paramStr = trimQuotes(param.substring(subsequenceStartIndex, param.length()));
+			dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 			subsequenceStartIndex = -1;
 		}
-		else if(params.size() == 0) {
-			params.add(param.substring(0, param.length()));
+		else if(dst.size() == 0) {
+			String paramStr = param.substring(0, param.length());
+			dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 			subsequenceStartIndex = -1;
 		}
-		return params;
+		return dst;
 	}
 
 
