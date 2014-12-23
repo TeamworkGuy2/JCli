@@ -107,7 +107,7 @@ public class ProgramArgsTest {
 
 	public static void programArgsTest(String[] args) {
 		Params params = new Params();
-		ParameterMetaData<String, Integer> loopParam = ParameterBuilder.<String>newInteger(Integer.class)
+		ParameterMetaData<String, Integer> loopParam = ParameterBuilder.newInteger(Integer.class)
 				.setNameAndAliases("-loopCount", "-loops", "-loop-count")
 				.setSetter((arg) -> params.setLoops(arg))
 				.setHelpMessage("how many times to run the task")
@@ -115,7 +115,7 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, TimeUnit> timeUnitParam = ParameterBuilder.<String, TimeUnit>newEnum(TimeUnit.class)
+		ParameterMetaData<String, TimeUnit> timeUnitParam = ParameterBuilder.newEnum(TimeUnit.class)
 				.setNameAndAliases("-timeUnit")
 				.setSetter(params::setTimeUnit)
 				.setHelpMessage("the time units of the task")
@@ -123,21 +123,21 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.<String>newPath(Path.class)
+		ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath(Path.class)
 				.setNameAndAliases("-searchPath")
 				.setSetter(params::setSearchPath)
 				.setHelpMessage("the task search path")
 				.setRequestParameterMessage("please enter the search path to search: ")
 				.build();
 
-		ParameterMetaData<String, Path[]> recentPathsParam = ParameterBuilder.<String>newPathArray(Path[].class)
+		ParameterMetaData<String, Path[]> recentPathsParam = ParameterBuilder.newPathArray(Path[].class)
 				.setNameAndAliases("-recentPaths")
 				.setSetter(params::setRecentSaved)
 				.setHelpMessage("recently used paths")
 				.setRequestParameterMessage("enter a list of recent paths: ")
 				.build();
 
-		ParameterMetaData<String, String> taskNameParam = ParameterBuilder.<String>newText(String.class)
+		ParameterMetaData<String, String> taskNameParam = ParameterBuilder.newText(String.class)
 				.setNameAndAliases("-name", "-taskName")
 				.setSetter(params::setTaskName)
 				.setHelpMessage("the task name")
@@ -145,7 +145,7 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Boolean> regexSearchParam = ParameterBuilder.<String>newFlag(Boolean.class)
+		ParameterMetaData<String, Boolean> regexSearchParam = ParameterBuilder.newFlag(Boolean.class)
 				.setNameAndAliases("-regexSearch", "-useRegex", "-regex")
 				.setSetter(params::setRegexSearch)
 				.setHelpMessage("flag indicating that the search string is a regex string")
@@ -171,6 +171,7 @@ public class ProgramArgsTest {
 				"\"a=\\\"A\\\"\"",
 				"\"\""
 		};
+		@SuppressWarnings("unchecked")
 		List<String>[] expect = new List[] {
 				Arrays.asList("1", "w", "3", "arg 4", "or \\\' quote"),
 				Arrays.asList("a b", "c\""),
@@ -180,9 +181,7 @@ public class ProgramArgsTest {
 				Arrays.asList("a=\"A\""),
 				Arrays.asList("")
 		};
-		Check.checkTests(params, expect, "", "", (param) -> {
-			return ParameterParser.parseParameters(param);
-		});
+		Check.checkTests(params, expect, "", "", (p) -> ParameterParser.parseParameters(p));
 	}
 
 
@@ -212,10 +211,10 @@ public class ProgramArgsTest {
 
 	public static void main(String[] args) {
 		testParseString();
-		/*String[] argAry = ParameterParser.parseParameters(
+		String[] argAry = ParameterParser.parseParameters(
 				"-help -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
 		).toArray(new String[0]);
-		programArgsTest(argAry);*/
+		programArgsTest(argAry);
 	}
 
 }

@@ -76,77 +76,77 @@ public interface ParameterBuilder<C extends CharSequence, T> {
 	public ParameterMetaData<C, T> build();
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Boolean> newFlag(Class<Boolean> classType) {
-		return new ParameterBuilderImpl<C, Boolean>(classType, false);
+	public static ParameterBuilderImpl<String, Boolean> newFlag(Class<Boolean> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Float> newFloat(Class<Float> classType) {
-		return new ParameterBuilderImpl<C, Float>(classType, false);
+	public static ParameterBuilderImpl<String, Float> newFloat(Class<Float> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Integer> newInteger(Class<Integer> classType) {
-		return new ParameterBuilderImpl<C, Integer>(classType, false);
+	public static ParameterBuilderImpl<String, Integer> newInteger(Class<Integer> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Path> newPath(Class<Path> classType) {
-		return new ParameterBuilderImpl<C, Path>(classType, false);
+	public static ParameterBuilderImpl<String, Path> newPath(Class<Path> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, String> newText(Class<String> classType) {
-		return new ParameterBuilderImpl<C, String>(classType, false);
+	public static ParameterBuilderImpl<String, String> newText(Class<String> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Boolean> newFlagArray(Class<Boolean[]> classType) {
-		return new ParameterBuilderImpl<C, Boolean>(classType, false);
+	public static ParameterBuilderImpl<String, Boolean> newFlagArray(Class<Boolean[]> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Float[]> newFloatArray(Class<Float[]> classType) {
-		return new ParameterBuilderImpl<C, Float[]>(classType, false);
+	public static ParameterBuilderImpl<String, Float[]> newFloatArray(Class<Float[]> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Integer[]> newIntegerArray(Class<Integer[]> classType) {
-		return new ParameterBuilderImpl<C, Integer[]>(classType, false);
+	public static ParameterBuilderImpl<String, Integer[]> newIntegerArray(Class<Integer[]> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, Path[]> newPathArray(Class<Path[]> classType) {
-		return new ParameterBuilderImpl<C, Path[]>(classType, false);
+	public static ParameterBuilderImpl<String, Path[]> newPathArray(Class<Path[]> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence> ParameterBuilderImpl<C, String[]> newTextArray(Class<String[]> classType) {
-		return new ParameterBuilderImpl<C, String[]>(classType, false);
+	public static ParameterBuilderImpl<String, String[]> newTextArray(Class<String[]> classType) {
+		return new ParameterBuilderImpl<>(classType, false);
 	}
 
 
-	public static <C extends CharSequence, E extends Enum<E>> ParameterBuilderImpl<C, E> newEnum(
+	public static <E extends Enum<E>> ParameterBuilderImpl<String, E> newEnum(
 			Class<E> enumClass) {
-		return ParameterBuilderImpl.<C, E>newEnumParameterBuilder(enumClass);
+		return ParameterBuilderImpl.<String, E>newEnumParameterBuilder(enumClass);
 	}
 
 
-	public static <C extends CharSequence, E extends Enum<E>> ParameterBuilderImpl<C, E> newEnumArray(
+	public static <E extends Enum<E>> ParameterBuilderImpl<String, E> newEnumArray(
 			Class<E[]> enumArrayClass) {
-		return ParameterBuilderImpl.<C, E>newEnumArrayParameterBuilder(enumArrayClass);
+		return ParameterBuilderImpl.<String, E>newEnumArrayParameterBuilder(enumArrayClass);
 	}
 
 
-	public static <C extends CharSequence, E> ParameterBuilderImpl<C, E> newEnumMap(
+	public static <E> ParameterBuilderImpl<String, E> newEnumMap(
 			Map<String, E> enumsMap, Class<E> classType) {
-		return ParameterBuilderImpl.<C, E>newEnumMapParameterBuilder(enumsMap, classType);
+		return ParameterBuilderImpl.<String, E>newEnumMapParameterBuilder(enumsMap, classType);
 	}
 
 
-	public static <C extends CharSequence, E> ParameterBuilderImpl<C, E> newEnumMapArray(
+	public static <E> ParameterBuilderImpl<String, E> newEnumMapArray(
 			Map<String, E> enumsMap, Class<E[]> classType) {
-		return ParameterBuilderImpl.<C, E>newEnumArrayMapParameterBuilder(enumsMap, classType);
+		return ParameterBuilderImpl.<String, E>newEnumArrayMapParameterBuilder(enumsMap, classType);
 	}
 
 }

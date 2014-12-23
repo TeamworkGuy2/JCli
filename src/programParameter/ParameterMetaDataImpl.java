@@ -116,6 +116,12 @@ public class ParameterMetaDataImpl<T extends CharSequence, E> implements Paramet
 
 
 	@Override
+	public void parse(T[] strings) {
+		parse(strings, 0, strings.length);
+	}
+
+
+	@Override
 	public void parse(T[] strings, int off, int len) {
 		validateParameterName(strings[off]);
 		off++;

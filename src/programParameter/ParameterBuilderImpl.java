@@ -204,6 +204,7 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 			throw new IllegalArgumentException("this method creates a parameter parser for arrays of enum values, " +
 					"use newEnumParameterBuilder() for parsing single enum values");
 		}
+		@SuppressWarnings("unchecked")
 		Class<E> enumType = (Class<E>)enumArrayClass.getComponentType();
 		Map<String, E> enumMap = MapBuilder.newMutableEnumNames(enumType);
 		return new ParameterBuilderImpl<C, E>(enumMap, enumType, true, false);
@@ -212,13 +213,19 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 
 	public static final <C extends CharSequence, T> ParameterBuilderImpl<C, T> newEnumMapParameterBuilder(
 			Map<String, ? extends T> enumsMap, Class<T> dataType) {
-		return new ParameterBuilderImpl<C, T>((Map<String, T>)enumsMap, dataType, true, false);
+		@SuppressWarnings("unchecked")
+		Map<String, T> enumMap = (Map<String, T>)enumsMap;
+		return new ParameterBuilderImpl<C, T>(enumMap, dataType, true, false);
 	}
 
 
 	public static final <C extends CharSequence, T> ParameterBuilderImpl<C, T> newEnumArrayMapParameterBuilder(
 			Map<String, ? extends T> enumsMap, Class<T[]> dataType) {
-		return new ParameterBuilderImpl<C, T>((Map<String, T>)enumsMap, (Class<T>)dataType.getComponentType(), true, true);
+		@SuppressWarnings("unchecked")
+		Class<T> enumType = (Class<T>)dataType.getComponentType();
+		@SuppressWarnings("unchecked")
+		Map<String, T> enumMap = (Map<String, T>)enumsMap;
+		return new ParameterBuilderImpl<C, T>(enumMap, enumType, true, true);
 	}
 
 }

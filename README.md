@@ -5,7 +5,7 @@ Basic Java parameter parsing.  Can parse command line arguments or run interacti
 Aliases can be defined for parameters as well as help messages. 
 Parameters can be marked as required (default to optional) and help and input messages can be added which JParameter uses when running in interactive mode. 
 
-Standard mode parses parameters from the program's arguments (e.g. main(String[] args)). 
+Standard mode can be used to parse program's arguments (e.g. from main(String[] args)). 
 
 Interactive mode asks the user for each required parameter in order and can be combined with standard mode to ask the user for parameters missing from the program's arguments. 
 
@@ -13,16 +13,16 @@ Example:
 --------
 
     public static void main(String[] args) {
-      ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.<String>newPath(Path.class)
+      ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath(Path.class)
           .setNameAndAliases("-searchPath", "-search", "-sp")
-          .setSetter(params::setSearchPath)  // a setter method that accepts a Path
+          .setSetter(params::setSearchPath)  // a setter method that accepts a Path object
           .setHelpMessage("the task search path")
-          .setRequestParameterMessage("please enter the search path to search: ")
+          .setRequestParameterMessage("please enter the path to search: ")
           .build();
 
       ParameterSet<String> paramSet = ParameterSet.newParameterSet(Arrays.asList(searchPathParam), true, "-help");
 
-      paramSet.parseInteractive(args, 0, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
+      paramSet.parseInteractive(args, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
 	}
 
 The above example defines one parameter with the name '-searchPath' that can also be identified via the aliases '-search' and -'sp', this parameter has a help message and request parameter message which are printed to the command line when parsing interactively.

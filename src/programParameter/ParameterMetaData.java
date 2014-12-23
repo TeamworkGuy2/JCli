@@ -27,8 +27,10 @@ public interface ParameterMetaData<T, E> extends ParameterName<T>, ParameterAlia
 
 
 	/**
-	 * @return a mapping of the recognized enum values of this parameter if its parameter
-	 * type is {@link ParameterType#ENUM}
+	 * @return a mapping of the recognized enum names and values of this parameter.
+	 * This method only returns a map if if this parameter meta data has a
+	 * {@link ParameterType} of {@link ParameterType#ENUM ENUM}, else null is returned.
+	 * @see #getParameterType()
 	 */
 	public Map<String, E> getEnumMap();
 
@@ -49,6 +51,13 @@ public interface ParameterMetaData<T, E> extends ParameterName<T>, ParameterAlia
 	public default boolean isParameterName(T inputName) {
 		return getPrimaryName().equals(inputName) || getAliases().contains(inputName);
 	}
+
+
+	/** Parse the specified inputs and call this parameter's setter with each of
+	 * the parsed values
+	 * @param inputs the array of inputs to parse
+	 */
+	public void parse(T[] inputs);
 
 
 	/** Parse the specified inputs and call this parameter's setter with each of
