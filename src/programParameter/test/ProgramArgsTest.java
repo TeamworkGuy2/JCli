@@ -107,7 +107,7 @@ public class ProgramArgsTest {
 
 	public static void programArgsTest(String[] args) {
 		Params params = new Params();
-		ParameterMetaData<String, Integer> loopParam = ParameterBuilder.newInteger(Integer.class)
+		ParameterMetaData<String, Integer> loopParam = ParameterBuilder.newInteger()
 				.setNameAndAliases("-loopCount", "-loops", "-loop-count")
 				.setSetter((arg) -> params.setLoops(arg))
 				.setHelpMessage("how many times to run the task")
@@ -123,21 +123,21 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath(Path.class)
+		ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath()
 				.setNameAndAliases("-searchPath")
 				.setSetter(params::setSearchPath)
 				.setHelpMessage("the task search path")
 				.setRequestParameterMessage("please enter the search path to search: ")
 				.build();
 
-		ParameterMetaData<String, Path[]> recentPathsParam = ParameterBuilder.newPathArray(Path[].class)
+		ParameterMetaData<String, Path[]> recentPathsParam = ParameterBuilder.newPathArray()
 				.setNameAndAliases("-recentPaths")
 				.setSetter(params::setRecentSaved)
 				.setHelpMessage("recently used paths")
 				.setRequestParameterMessage("enter a list of recent paths: ")
 				.build();
 
-		ParameterMetaData<String, String> taskNameParam = ParameterBuilder.newText(String.class)
+		ParameterMetaData<String, String> taskNameParam = ParameterBuilder.newText()
 				.setNameAndAliases("-name", "-taskName")
 				.setSetter(params::setTaskName)
 				.setHelpMessage("the task name")
@@ -145,7 +145,7 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Boolean> regexSearchParam = ParameterBuilder.newFlag(Boolean.class)
+		ParameterMetaData<String, Boolean> regexSearchParam = ParameterBuilder.newFlag()
 				.setNameAndAliases("-regexSearch", "-useRegex", "-regex")
 				.setSetter(params::setRegexSearch)
 				.setHelpMessage("flag indicating that the search string is a regex string")

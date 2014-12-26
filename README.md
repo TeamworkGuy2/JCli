@@ -12,8 +12,19 @@ Interactive mode asks the user for each required parameter in order and can be c
 Example:
 --------
 
+    public class UserParameters {
+      private Path searchPath;
+      
+      public void setSearchPath(Path searchPath) {
+        this.searchPath = searchPath;
+      }
+    }
+    //...
+    
     public static void main(String[] args) {
-      ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath(Path.class)
+      UserParameters params = new UserParameters();
+      
+      ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath()
           .setNameAndAliases("-searchPath", "-search", "-sp")
           .setSetter(params::setSearchPath)  // a setter method that accepts a Path object
           .setHelpMessage("the task search path")

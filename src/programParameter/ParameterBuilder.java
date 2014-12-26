@@ -70,59 +70,68 @@ public interface ParameterBuilder<C extends CharSequence, T> {
 	public Consumer<T> getSetter();
 
 
+	/** A function to call with the results of successfully parsing parameters.
+	 * If this parameter type is an array, the function is expected to accept an array
+	 * of the primitive type of this parameter.  For example, if the parameter type is
+	 * an array of {@link ParameterType#FLAG}, the function should accept a {@code boolean[]}.
+	 * If the parameter type is an array of {@link ParameterType#TEXT}, the function should
+	 * accept a {@code String[]}
+	 * @param setter
+	 * @return
+	 */
 	public ParameterBuilder<C, T> setSetter(Consumer<T> setter);
 
 
 	public ParameterMetaData<C, T> build();
 
 
-	public static ParameterBuilderImpl<String, Boolean> newFlag(Class<Boolean> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Boolean> newFlag() {
+		return new ParameterBuilderImpl<>(ParameterType.FLAG, false);
 	}
 
 
-	public static ParameterBuilderImpl<String, Float> newFloat(Class<Float> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Float> newFloat() {
+		return new ParameterBuilderImpl<>(ParameterType.FLOAT, false);
 	}
 
 
-	public static ParameterBuilderImpl<String, Integer> newInteger(Class<Integer> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Integer> newInteger() {
+		return new ParameterBuilderImpl<>(ParameterType.INTEGER, false);
 	}
 
 
-	public static ParameterBuilderImpl<String, Path> newPath(Class<Path> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Path> newPath() {
+		return new ParameterBuilderImpl<>(ParameterType.PATH, false);
 	}
 
 
-	public static ParameterBuilderImpl<String, String> newText(Class<String> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, String> newText() {
+		return new ParameterBuilderImpl<>(ParameterType.TEXT, false);
 	}
 
 
-	public static ParameterBuilderImpl<String, Boolean> newFlagArray(Class<Boolean[]> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Boolean> newFlagArray() {
+		return new ParameterBuilderImpl<>(ParameterType.FLAG, true);
 	}
 
 
-	public static ParameterBuilderImpl<String, Float[]> newFloatArray(Class<Float[]> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Float[]> newFloatArray() {
+		return new ParameterBuilderImpl<>(ParameterType.FLOAT, true);
 	}
 
 
-	public static ParameterBuilderImpl<String, Integer[]> newIntegerArray(Class<Integer[]> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Integer[]> newIntegerArray() {
+		return new ParameterBuilderImpl<>(ParameterType.INTEGER, true);
 	}
 
 
-	public static ParameterBuilderImpl<String, Path[]> newPathArray(Class<Path[]> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, Path[]> newPathArray() {
+		return new ParameterBuilderImpl<>(ParameterType.PATH, true);
 	}
 
 
-	public static ParameterBuilderImpl<String, String[]> newTextArray(Class<String[]> classType) {
-		return new ParameterBuilderImpl<>(classType, false);
+	public static ParameterBuilderImpl<String, String[]> newTextArray() {
+		return new ParameterBuilderImpl<>(ParameterType.TEXT, true);
 	}
 
 

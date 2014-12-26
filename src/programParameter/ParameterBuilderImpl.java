@@ -1,13 +1,12 @@
 package programParameter;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import dataUtility.MapBuilder;
+import dataUtils.MapBuilder;
 
 public class ParameterBuilderImpl<C extends CharSequence, T> implements ParameterBuilder<C, T> {
 	private ParameterType type;
@@ -29,6 +28,11 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 	}
 
 
+	public ParameterBuilderImpl(ParameterType type, boolean isArray) {
+		this(isArray ? type.getArrayDataType() : type.getDefaultDataType(), type == ParameterType.ENUM);
+	}
+
+
 	// package-private
 	ParameterBuilderImpl(Class<?> classType, boolean isEnum) {
 		this.isArray = classType.isArray();
@@ -36,25 +40,15 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 			classType = classType.getComponentType();
 		}
 
-		if(classType == Boolean.TYPE || classType == Boolean.class) {
-			this.type = ParameterType.FLAG;
+		boolean foundType = false;
+		for(ParameterType type : ParameterType.values()) {
+			if(type.isDataTypeClass(classType)) {
+				this.type = type;
+				foundType = true;
+				break;
+			}
 		}
-		else if(classType == Float.TYPE || classType == Float.class) {
-			this.type = ParameterType.FLOAT;
-		}
-		else if(classType == Integer.TYPE || classType == Integer.class) {
-			this.type = ParameterType.INTEGER;
-		}
-		else if(Path.class.isAssignableFrom(classType)) {
-			this.type = ParameterType.PATH;
-		}
-		else if(String.class.isAssignableFrom(classType)) {
-			this.type = ParameterType.TEXT;
-		}
-		else if(isEnum && Enum.class.isAssignableFrom(classType)) {
-			this.type = ParameterType.ENUM;
-		}
-		else {
+		if(!foundType) {
 			throw new IllegalArgumentException("the class '" + classType + "'" +
 					" is not a recognized parameter type, a parameter type must be one of ParameterType's values");
 		}
@@ -176,7 +170,7 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 					setter, helpMsg, requestParamMsg, required);
 		}
 		else {
-			param = new ParameterMetaDataImpl<C, T>(type, isArray, enumMap, primaryName, aliases,
+			param = new ParameterMetaDataImpl<>(type, isArray, enumMap, primaryName, aliases,
 					setter, helpMsg, requestParamMsg, required);
 		}
 		return param;

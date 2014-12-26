@@ -101,10 +101,29 @@ public final class ParameterSet<T extends String> {
 	 * the parameters in this parameter set that match any of the inputs.
 	 * This differs from {@link #parse(Object[], int)} because missing parameters
 	 * are requested using the specified output stream and parsed from the specified input stream
-	 * @param input the input stream to read user input from
-	 * @param output the output stream to print user information and prompts to
 	 * @param inputs the array of inputs to parse
 	 * @param off the offset into {@code inputs} at which to start parsing
+	 * @param input the input stream to read user input from
+	 * @param output the output stream to print user information and prompts to
+	 * @param paramHelpIdentifier the name of the command that causes help information
+	 * to be printed for a parameter
+	 */
+	public void parseInteractive(T[] inputs, BufferedReader input, Appendable output,
+			String paramHelpIdentifier) {
+		parseInteractive(inputs, 0, input, output, paramHelpIdentifier);
+	}
+
+
+	/** Parse an array of inputs and invoke {@link ParameterMetaData#parse()} on
+	 * the parameters in this parameter set that match any of the inputs.
+	 * This differs from {@link #parse(Object[], int)} because missing parameters
+	 * are requested using the specified output stream and parsed from the specified input stream
+	 * @param inputs the array of inputs to parse
+	 * @param off the offset into {@code inputs} at which to start parsing
+	 * @param input the input stream to read user input from
+	 * @param output the output stream to print user information and prompts to
+	 * @param paramHelpIdentifier the name of the command that causes help information
+	 * to be printed for a parameter
 	 */
 	public void parseInteractive(T[] inputs, int off, BufferedReader input, Appendable output,
 			String paramHelpIdentifier) {
