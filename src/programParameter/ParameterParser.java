@@ -11,6 +11,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import stringUtils.StringModify;
 import stringUtils.StringReplace;
 import functionUtils.TriConsumer;
 
@@ -220,7 +221,7 @@ public final class ParameterParser<U> {
 				lookingForWhitespace = true;
 				if(finishedQuotes) {
 					finishedQuotes = false;
-					String paramStr = trimQuotes(param.substring(subsequenceStartIndex, i));
+					String paramStr = StringModify.trimQuotes(param.substring(subsequenceStartIndex, i));
 					dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 					//startIndex = -1;
 				}
@@ -231,7 +232,7 @@ public final class ParameterParser<U> {
 		if(subsequenceStartIndex != -1) {
 			//outP.println(param);
 			//outP.println(new String(spaces, 0, param.length()-1) + "^end");
-			String paramStr = trimQuotes(param.substring(subsequenceStartIndex, param.length()));
+			String paramStr = StringModify.trimQuotes(param.substring(subsequenceStartIndex, param.length()));
 			dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 			subsequenceStartIndex = -1;
 		}
@@ -241,30 +242,6 @@ public final class ParameterParser<U> {
 			subsequenceStartIndex = -1;
 		}
 		return dst;
-	}
-
-
-	/** Trim quotes from the start and end of a string if there
-	 * are is a quote {@code "} at both the beginning and end of the string.
-	 * @param strs the list of strings to trim quotes from, the
-	 * modified strings are replaced in the list by their trimmed versions.
-	 * This list must be modifiable, its size will not be changed.
-	 */
-	public static final void trimQuotes(List<String> strs) {
-		for(int i = 0, size = strs.size(); i < size; i++) {
-			String str = strs.get(i);
-			if(str.length() > 1 && str.charAt(0) == '"' && str.charAt(str.length()-1) == '"') {
-				strs.set(i, str.substring(1, str.length()-1));
-			}
-		}
-	}
-
-
-	public static final String trimQuotes(String str) {
-		if(str.length() > 1 && str.charAt(0) == '"' && str.charAt(str.length()-1) == '"') {
-			return str.substring(1, str.length()-1);
-		}
-		return str;
 	}
 
 }

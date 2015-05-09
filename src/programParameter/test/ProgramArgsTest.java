@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import programParameter.ParameterBuilder;
-import programParameter.ParameterMetaData;
+import programParameter.ParameterData;
 import programParameter.ParameterParser;
 import programParameter.ParameterSet;
 import checks.Check;
@@ -107,15 +107,17 @@ public class ProgramArgsTest {
 
 	public static void programArgsTest(String[] args) {
 		Params params = new Params();
-		ParameterMetaData<String, Integer> loopParam = ParameterBuilder.newInteger()
+		ParameterData<String, Integer> loopParam = ParameterBuilder.newInteger()
 				.setNameAndAliases("-loopCount", "-loops", "-loop-count")
 				.setSetter((arg) -> params.setLoops(arg))
 				.setHelpMessage("how many times to run the task")
 				.setRequestParameterMessage("enter task run count: ")
+				.setValidator((num) -> num > 0 && num < 11)
+				.setValidatorMessageGenerator((num) -> "loop count must be great than 0 and less than 11, was '" + num + "'")
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, TimeUnit> timeUnitParam = ParameterBuilder.newEnum(TimeUnit.class)
+		ParameterData<String, TimeUnit> timeUnitParam = ParameterBuilder.newEnum(TimeUnit.class)
 				.setNameAndAliases("-timeUnit")
 				.setSetter(params::setTimeUnit)
 				.setHelpMessage("the time units of the task")
@@ -123,21 +125,24 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Path> searchPathParam = ParameterBuilder.newPath()
+		ParameterData<String, Path> searchPathParam = ParameterBuilder.newPath()
 				.setNameAndAliases("-searchPath")
 				.setSetter(params::setSearchPath)
 				.setHelpMessage("the task search path")
 				.setRequestParameterMessage("please enter the search path to search: ")
+				.setValidator((path) -> path.toString().indexOf('&') == -1) // don't allow paths with '&' in them
+				.setValidatorMessageGenerator((path) -> "paths containing '&', such as '" + path + "' are not allowed")
+				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Path[]> recentPathsParam = ParameterBuilder.newPathArray()
+		ParameterData<String, Path[]> recentPathsParam = ParameterBuilder.newPathArray()
 				.setNameAndAliases("-recentPaths")
 				.setSetter(params::setRecentSaved)
 				.setHelpMessage("recently used paths")
 				.setRequestParameterMessage("enter a list of recent paths: ")
 				.build();
 
-		ParameterMetaData<String, String> taskNameParam = ParameterBuilder.newText()
+		ParameterData<String, String> taskNameParam = ParameterBuilder.newText()
 				.setNameAndAliases("-name", "-taskName")
 				.setSetter(params::setTaskName)
 				.setHelpMessage("the task name")
@@ -145,7 +150,7 @@ public class ProgramArgsTest {
 				.setRequired(true)
 				.build();
 
-		ParameterMetaData<String, Boolean> regexSearchParam = ParameterBuilder.newFlag()
+		ParameterData<String, Boolean> regexSearchParam = ParameterBuilder.newFlag()
 				.setNameAndAliases("-regexSearch", "-useRegex", "-regex")
 				.setSetter(params::setRegexSearch)
 				.setHelpMessage("flag indicating that the search string is a regex string")
@@ -153,7 +158,7 @@ public class ProgramArgsTest {
 				.build();
 
 		ParameterSet<String> paramSet = ParameterSet.newParameterSet(Arrays.asList(loopParam, timeUnitParam,
-				searchPathParam, recentPathsParam, taskNameParam, regexSearchParam), true, "-help");
+				taskNameParam, searchPathParam, recentPathsParam, regexSearchParam), true, "-help");
 		//paramSet.parse(args, 0, System.out);
 		paramSet.parseInteractive(args, 0, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
 
@@ -215,6 +220,10 @@ public class ProgramArgsTest {
 				"-help -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
 		).toArray(new String[0]);
 		programArgsTest(argAry);
+
+		if(Math.round(2) >= 3) {
+			testParameterParser();
+		}
 	}
 
 }

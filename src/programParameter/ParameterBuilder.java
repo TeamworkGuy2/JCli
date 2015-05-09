@@ -4,8 +4,10 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-/** Interface for {@link ParameterMetaData} builders
+/** Interface for {@link ParameterData} builders
  * 
  * @author TeamworkGuy2
  * @since 2014-11-19
@@ -25,6 +27,18 @@ public interface ParameterBuilder<C extends CharSequence, T> {
 
 
 	public ParameterBuilder<C, T> setIsArrayType(boolean isArrayType);
+
+
+	public Predicate<T> getValidator();
+
+
+	public ParameterBuilder<C, T> setValidator(Predicate<T> validator);
+
+
+	public Function<T, String> getValidatorMessageGenerator();
+
+
+	public ParameterBuilder<C, T> setValidatorMessageGenerator(Function<T, String> validatorMessageGenerator);
 
 
 	/** Get the enum map associated with this parameter if it is an {@link ParameterType#ENUM}
@@ -77,12 +91,12 @@ public interface ParameterBuilder<C extends CharSequence, T> {
 	 * If the parameter type is an array of {@link ParameterType#TEXT}, the function should
 	 * accept a {@code String[]}
 	 * @param setter
-	 * @return
+	 * @return this parameter build instance
 	 */
 	public ParameterBuilder<C, T> setSetter(Consumer<T> setter);
 
 
-	public ParameterMetaData<C, T> build();
+	public ParameterData<C, T> build();
 
 
 	public static ParameterBuilderImpl<String, Boolean> newFlag() {

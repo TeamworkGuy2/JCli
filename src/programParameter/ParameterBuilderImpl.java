@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import dataUtils.MapBuilder;
+import collectionUtils.MapBuilder;
 
 public class ParameterBuilderImpl<C extends CharSequence, T> implements ParameterBuilder<C, T> {
 	private ParameterType type;
@@ -18,6 +20,8 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 	private String requestParamMsg;
 	private boolean required;
 	private Consumer<T> setter;
+	private Predicate<T> validator;
+	private Function<T, String> validatorMsgs;
 
 
 	ParameterBuilderImpl(Map<String, ? extends T> enumsMap, Class<T> dataType, boolean isEnum, boolean isArray) {
@@ -163,15 +167,41 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 
 
 	@Override
-	public ParameterMetaData<C, T> build() {
-		ParameterMetaData<C, T> param = null;
+	public Predicate<T> getValidator() {
+		return validator;
+	}
+
+
+	@Override
+	public ParameterBuilder<C, T> setValidator(Predicate<T> validator) {
+		this.validator = validator;
+		return this;
+	}
+
+
+	@Override
+	public Function<T, String> getValidatorMessageGenerator() {
+		return validatorMsgs;
+	}
+
+
+	@Override
+	public ParameterBuilder<C, T> setValidatorMessageGenerator(Function<T, String> validatorMessageGenerator) {
+		this.validatorMsgs = validatorMessageGenerator;
+		return this;
+	}
+
+
+	@Override
+	public ParameterData<C, T> build() {
+		ParameterData<C, T> param = null;
 		if(enumMap == null) {
-			param = new ParameterMetaDataImpl<>(type, isArray, primaryName, aliases,
-					setter, helpMsg, requestParamMsg, required);
+			param = new ParameterDataImpl<>(type, isArray, primaryName, aliases,
+					setter, validator, validatorMsgs, helpMsg, requestParamMsg, required);
 		}
 		else {
-			param = new ParameterMetaDataImpl<>(type, isArray, enumMap, primaryName, aliases,
-					setter, helpMsg, requestParamMsg, required);
+			param = new ParameterDataImpl<>(type, isArray, enumMap, primaryName, aliases,
+					setter, validator, validatorMsgs, helpMsg, requestParamMsg, required);
 		}
 		return param;
 	}
