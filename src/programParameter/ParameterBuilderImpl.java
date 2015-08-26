@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import collectionUtils.MapBuilder;
+import twg2.collections.util.MapBuilder;
 
 public class ParameterBuilderImpl<C extends CharSequence, T> implements ParameterBuilder<C, T> {
 	private ParameterType type;

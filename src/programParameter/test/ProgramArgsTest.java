@@ -13,11 +13,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.junit.Test;
+
 import programParameter.ParameterBuilder;
 import programParameter.ParameterData;
 import programParameter.ParameterParser;
 import programParameter.ParameterSet;
-import checks.Check;
+import checks.CheckTask;
 
 /**
  * @author TeamworkGuy2
@@ -166,7 +168,8 @@ public class ProgramArgsTest {
 	}
 
 
-	private static final void testParseString() {
+	@Test
+	public void testParseString() {
 		String[] params = new String[] {
 				"1 w 3 \"arg 4\" \"or \\\' quote\"",
 				"\"a b\" c\"",
@@ -186,7 +189,7 @@ public class ProgramArgsTest {
 				Arrays.asList("a=\"A\""),
 				Arrays.asList("")
 		};
-		Check.checkTests(params, expect, "", "", (p) -> ParameterParser.parseParameters(p));
+		CheckTask.assertTests(params, expect, (p) -> ParameterParser.parseParameters(p));
 	}
 
 
@@ -215,7 +218,6 @@ public class ProgramArgsTest {
 
 
 	public static void main(String[] args) {
-		testParseString();
 		String[] argAry = ParameterParser.parseParameters(
 				"-help -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
 		).toArray(new String[0]);
