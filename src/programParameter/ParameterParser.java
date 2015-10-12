@@ -11,9 +11,9 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import stringUtils.StringModify;
-import stringUtils.StringReplace;
-import functionUtils.TriConsumer;
+import twg2.functions.TriConsumer;
+import twg2.text.stringUtils.StringReplace;
+import twg2.text.stringUtils.StringTrim;
 
 /** A program parameter that can be identified by a list of aliases
  * and can be executed.
@@ -221,7 +221,7 @@ public final class ParameterParser<U> {
 				lookingForWhitespace = true;
 				if(finishedQuotes) {
 					finishedQuotes = false;
-					String paramStr = StringModify.trimQuotes(param.substring(subsequenceStartIndex, i));
+					String paramStr = StringTrim.trimQuotes(param.substring(subsequenceStartIndex, i));
 					dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 					//startIndex = -1;
 				}
@@ -232,7 +232,7 @@ public final class ParameterParser<U> {
 		if(subsequenceStartIndex != -1) {
 			//outP.println(param);
 			//outP.println(new String(spaces, 0, param.length()-1) + "^end");
-			String paramStr = StringModify.trimQuotes(param.substring(subsequenceStartIndex, param.length()));
+			String paramStr = StringTrim.trimQuotes(param.substring(subsequenceStartIndex, param.length()));
 			dst.add(parseEscapeChars ? StringReplace.replace(paramStr, "\\\"", "\"") : paramStr);
 			subsequenceStartIndex = -1;
 		}
