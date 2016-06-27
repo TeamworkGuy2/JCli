@@ -1,0 +1,14 @@
+{
+	"version" : "0.1.0",
+	"name" : "jparameter",
+	"description" : "A basic Java parameter parsing.  Can parse command line arguments or run interactively to parse common Java data types such as int, float, string, Path, and enum",
+	"homepage" : "https://github.com/TeamworkGuy2/JParameter",
+	"license" : "MIT",
+	"main" : "./jar/jparameter.jar",
+	"dependencies" : {
+		"jarray-util": "*",
+		"jcollection-util": "*",
+		"jfunc": "*",
+		"jtext-util": "*"
+	}
+}

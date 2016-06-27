@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import twg2.collections.util.MapBuilder;
+import twg2.collections.builder.MapBuilder;
 
 public class ParameterBuilderImpl<C extends CharSequence, T> implements ParameterBuilder<C, T> {
 	private ParameterType type;
@@ -215,7 +215,7 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 			throw new IllegalArgumentException("this method creates a parameter parser for single enum values, " +
 					"use newEnumArrayParameterBuilder() for parsing arrays of enum values");
 		}
-		Map<String, E> enumMap = MapBuilder.newMutableEnumNames(enumClass);
+		Map<String, E> enumMap = MapBuilder.mutableEnumNames(enumClass);
 		return new ParameterBuilderImpl<C, E>(enumMap, enumClass, true, false);
 	}
 
@@ -230,7 +230,7 @@ public class ParameterBuilderImpl<C extends CharSequence, T> implements Paramete
 		}
 		@SuppressWarnings("unchecked")
 		Class<E> enumType = (Class<E>)enumArrayClass.getComponentType();
-		Map<String, E> enumMap = MapBuilder.newMutableEnumNames(enumType);
+		Map<String, E> enumMap = MapBuilder.mutableEnumNames(enumType);
 		return new ParameterBuilderImpl<C, E>(enumMap, enumType, true, false);
 	}
 

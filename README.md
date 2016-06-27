@@ -1,7 +1,8 @@
 JParameter
 ==========
+version: 0.1.0
 
-Basic Java parameter parsing.  Can parse command line arguments or run interactively to parse common Java data types such as int, float, string, and enum. 
+Basic Java parameter parsing.  Can parse command line arguments or run interactively to parse common Java data types such as int, float, string, Path, and enum. 
 Aliases can be defined for parameters as well as help messages. 
 Parameters can be marked as required (defaults to optional) and help and input messages can be added which JParameter uses when running in interactive mode.
 Validators and validator error message generators can also be provided for parameters which are only valid within a certain subset of their type.
