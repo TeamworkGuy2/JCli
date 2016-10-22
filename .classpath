@@ -6,7 +6,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/TestChecks"/>
 	<classpathentry kind="output" path="bin"/>
-	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jarray-util/bin/jarray_util.jar" sourcepath="/JArrayUtil"/>
+	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jarrays/bin/jarrays.jar" sourcepath="/JArrayUtil"/>
 	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jcollection-builders/bin/jcollection_builders.jar" sourcepath="/JCollectionBuilders"/>
 	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jcollection-util/bin/jcollection_util.jar" sourcepath="/JCollectionUtility"/>
 	<classpathentry kind="lib" path="C:/Users/TeamworkGuy2/Documents/Java/Libraries/jfunc/bin/jfunc.jar" sourcepath="/JFunc"/>

@@ -163,7 +163,7 @@ public class ParameterDataImpl<T extends CharSequence, E> implements ParameterDa
 
 		switch(type) {
 		case ENUM:
-			readEnum(primaryName.toString(), isArray, enumMap, strings, off, len, setter, validator, validatorMsgGenerator);
+			result = readEnum(primaryName.toString(), isArray, enumMap, strings, off, len, setter, validator, validatorMsgGenerator);
 			break;
 		case FLAG:
 			{

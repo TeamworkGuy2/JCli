@@ -142,8 +142,8 @@ public final class ParameterSet<T extends CharSequence> {
 				int i = 0;
 				while(parseRes.isError() && parseRes.getParseError().getParseErrorType() == ParameterParserExceptionType.INVALID_PARSED_INPUT && i < ParameterSet.MAX_PARSE_ATTEMPTS) {
 					try {
-						output.append(parseRes.getParseError().getMessage());
-						output.append('\n');
+						output.append(parseRes.getParseError().getMessage())
+							.append('\n');
 					} catch (IOException e) {
 						throw new RuntimeException("error writing parameter info and request to output stream", e);
 					}
@@ -204,15 +204,15 @@ public final class ParameterSet<T extends CharSequence> {
 			String line = input.readLine();
 			while(paramHelpIdentifier != null && paramHelpIdentifier.equals(line)) {
 				try {
-					output.append(parameterInfo(param));
-					output.append('\n');
-					output.append(param.getRequestParameterMessage());
+					output.append(parameterInfo(param))
+						.append('\n')
+						.append(param.getRequestParameterMessage());
 				} catch (IOException e) {
 					throw new RuntimeException("error writing parameter info and request to output stream", e);
 				}
 				line = input.readLine();
 			}
-			List<String> inputs = new ArrayList<String>();
+			List<String> inputs = new ArrayList<String>(2);
 			inputs.add(param.getPrimaryName());
 			// if the parsing is interactive (one line of input per parameter, use the entire line for non-array parameters)
 			// this saves users having to quote every string parameter they enter
@@ -251,13 +251,13 @@ public final class ParameterSet<T extends CharSequence> {
 		if(generateHelpParam == true && helpParamName != null) {
 			List<String> aliases = helpParamAliases != null ? Arrays.asList(helpParamAliases) : null;
 
-			StringBuilder strB = new StringBuilder("\t'" + helpParamName + "'" + orParamAliasesToString(",", aliases) +
+			StringBuilder sb = new StringBuilder("\t'" + helpParamName + "'" + orParamAliasesToString(",", aliases) +
 					" - displays this help message\n");
 			for(ParameterData<String, ?> param : parameters) {
-				strB.append("\t" + parameterInfo(param) + "\n");
+				sb.append("\t" + parameterInfo(param) + "\n");
 			}
-			strB.append("\n");
-			final String helpMsg = strB.toString();
+			sb.append("\n");
+			final String helpMsg = sb.toString();
 
 			paramSet = new ParameterSet<String>(parameters, true, helpParamName, helpMsg, helpParamAliases);
 		}
@@ -282,13 +282,13 @@ public final class ParameterSet<T extends CharSequence> {
 	 */
 	private static final String orParamAliasesToString(String prefix, List<String> aliases) {
 		if(aliases != null && !aliases.isEmpty()) {
-			StringBuilder strB = new StringBuilder(prefix != null ? prefix + " " : "");
+			StringBuilder sb = new StringBuilder(prefix != null ? prefix + " " : "");
 			int size = aliases.size();
 			for(int i = 0, count = size - 1; i < count; i++) {
-				strB.append("'" + aliases.get(i) + "', ");
+				sb.append("'" + aliases.get(i) + "', ");
 			}
-			strB.append("'" + aliases.get(size - 1) + "'");
-			return strB.toString();
+			sb.append("'" + aliases.get(size - 1) + "'");
+			return sb.toString();
 		}
 		return "";
 	}
@@ -304,6 +304,7 @@ public final class ParameterSet<T extends CharSequence> {
 				param.getParameterType().name().toLowerCase() : "[false]";
 		boolean isArray = param.isParameterArrayType();
 		boolean isEnum = param.getParameterType() == ParameterType.ENUM;
+
 		return "'" + param.getPrimaryName() + " " + (isArray ? typeName + " [" + typeName + " ...]" : typeName) +
 				"'" + orParamAliasesToString(",", param.getAliases()) +
 				(isEnum ? " (one of: " + param.getEnumMap().keySet().toString() + ")" : "");

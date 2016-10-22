@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,13 +14,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import programParameter.ParameterBuilder;
 import programParameter.ParameterData;
 import programParameter.ParameterParser;
 import programParameter.ParameterSet;
-import checks.CheckTask;
 
 /**
  * @author TeamworkGuy2
@@ -107,7 +108,23 @@ public class ProgramArgsTest {
 	}
 
 
-	public static void programArgsTest(String[] args) {
+	@Test
+	public void parameterParsingTest() {
+		String[] argAry = ParameterParser.parseParameters(
+				"-name \"args test 1\" -searchPath \"E:/stuff/project\" -loops 3 -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
+		).toArray(new String[0]);
+		Params params = programArgsTest(argAry, true);
+
+		Assert.assertEquals("args test 1", params.taskName);
+		Assert.assertEquals(Paths.get("E:/stuff/project"), params.searchPath);
+		Assert.assertEquals(3, params.loops);
+		Assert.assertEquals(TimeUnit.SECONDS, params.timeUnit);
+		Assert.assertEquals(true, params.regexSearch);
+		Assert.assertEquals(Arrays.asList(Paths.get("Java\\projects\\IoUtility"), Paths.get("E:\\stuff\\example")), params.recentSaved);
+	}
+
+
+	public static Params programArgsTest(String[] args, boolean interactive) {
 		Params params = new Params();
 		ParameterData<String, Integer> loopParam = ParameterBuilder.newInteger()
 				.setNameAndAliases("-loopCount", "-loops", "-loop-count")
@@ -161,47 +178,29 @@ public class ProgramArgsTest {
 
 		ParameterSet<String> paramSet = ParameterSet.newParameterSet(Arrays.asList(loopParam, timeUnitParam,
 				taskNameParam, searchPathParam, recentPathsParam, regexSearchParam), true, "-help");
-		//paramSet.parse(args, 0, System.out);
-		paramSet.parseInteractive(args, 0, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
 
-		System.out.println("params obj: " + params);
-	}
+		if(interactive) {
+			paramSet.parseInteractive(args, 0, new BufferedReader(new InputStreamReader(System.in)), System.out, "help");
+		}
+		else {
+			paramSet.parse(args, 0, System.out);
+		}
 
-
-	@Test
-	public void testParseString() {
-		String[] params = new String[] {
-				"1 w 3 \"arg 4\" \"or \\\' quote\"",
-				"\"a b\" c\"",
-				"\"vla\", \"wa\"",
-				" abc\"de\"",
-				"\"alpha beta\"",
-				"\"a=\\\"A\\\"\"",
-				"\"\""
-		};
-		@SuppressWarnings("unchecked")
-		List<String>[] expect = new List[] {
-				Arrays.asList("1", "w", "3", "arg 4", "or \\\' quote"),
-				Arrays.asList("a b", "c\""),
-				Arrays.asList("\"vla\",", "wa"),
-				Arrays.asList("abc\"de\""),
-				Arrays.asList("alpha beta"),
-				Arrays.asList("a=\"A\""),
-				Arrays.asList("")
-		};
-		CheckTask.assertTests(params, expect, (p) -> ParameterParser.parseParameters(p));
+		return params;
 	}
 
 
 	private static final void testParameterParser() {
-		Consumer<String> print = (s) -> { System.out.println(s); };
+		Consumer<String> print = (s) -> {
+			System.out.println(s);
+		};
 		String param1 = "\"quoted param one\" second_param third forth's fifth\"with quote\" \"next quote\"with_extra";
 		String param2 = "'quoted parameter one' second_param third forth\"s fifth'with quote' 'next quote'with_extra";
 		ParameterParser.parseParameters(param1, '"').forEach(print);
 		System.out.println("\n----");
 		ParameterParser.parseParameters(param2, '\'').forEach(print);
 
-		Function<Integer, Function<Integer, Integer>> g = x -> { return (y -> { return x + y; } ); };
+		Function<Integer, Function<Integer, Integer>> g = (x) -> (y) -> (x + y);
 		System.out.println(g.apply(3).apply(3));
 
 		System.out.println("Fields of: " + g.getClass());
@@ -221,11 +220,11 @@ public class ProgramArgsTest {
 		String[] argAry = ParameterParser.parseParameters(
 				"-help -timeUnit SECONDS -regex -recentPaths \"Java\\projects\\IoUtility\" E:\\stuff\\example"
 		).toArray(new String[0]);
-		programArgsTest(argAry);
 
-		if(Math.round(2) >= 3) {
-			testParameterParser();
-		}
+		Params params = programArgsTest(argAry, true);
+		System.out.println("params obj: " + params);
+
+		testParameterParser();
 	}
 
 }

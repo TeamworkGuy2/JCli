@@ -1,6 +1,6 @@
 JParameter
 ==========
-version: 0.1.1
+version: 0.1.2
 
 Basic Java parameter parsing.  Can parse command line arguments or run interactively to parse common Java data types such as int, float, string, Path, and enum. 
 Aliases can be defined for parameters as well as help messages. 
