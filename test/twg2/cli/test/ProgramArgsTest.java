@@ -1,4 +1,4 @@
-package programParameter.test;
+package twg2.cli.test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,10 +17,10 @@ import java.util.function.Function;
 import org.junit.Assert;
 import org.junit.Test;
 
-import programParameter.ParameterBuilder;
-import programParameter.ParameterData;
-import programParameter.ParameterParser;
-import programParameter.ParameterSet;
+import twg2.cli.ParameterBuilder;
+import twg2.cli.ParameterData;
+import twg2.cli.ParameterParser;
+import twg2.cli.ParameterSet;
 
 /**
  * @author TeamworkGuy2

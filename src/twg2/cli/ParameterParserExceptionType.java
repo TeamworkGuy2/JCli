@@ -1,4 +1,4 @@
-package programParameter;
+package twg2.cli;
 
 enum ParameterParserExceptionType {
 	INPUT_PARSING_EXCEPTION, // if the input could not be parsed

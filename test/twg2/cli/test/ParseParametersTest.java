@@ -1,11 +1,11 @@
-package programParameter.test;
+package twg2.cli.test;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
-import programParameter.ParameterParser;
+import twg2.cli.ParameterParser;
 import checks.CheckTask;
 
 /**

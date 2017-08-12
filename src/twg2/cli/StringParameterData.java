@@ -1,4 +1,4 @@
-package programParameter;
+package twg2.cli;
 
 /** Information about a string parameter object.
  * A parameter contains the data type and parsing logic
